@@ -43,7 +43,10 @@ m_editable.helpers({
         return Template.m_editable_handle_atag;
     },
     'displayVal': function () {
-		Session.set('displayValue', valueToDisplay(this));
+		value = Session.get('displayValue');
+		if (!value) {
+			Session.set('displayValue', valueToDisplay(this));
+		}
 		return Session.get('displayValue');
     },
     'value':         function () { return valueToText(this.value, this.source) || this.emptyText; },
