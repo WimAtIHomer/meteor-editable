@@ -43,11 +43,8 @@ m_editable.helpers({
         return Template.m_editable_handle_atag;
     },
     'displayVal': function () {
-        var v = valueToText(this.value, this.source) || this.emptyText;
-        if (typeof this.display === 'function') {
-            return this.display(v, this.value) || this.emptyText;
-        }
-        return v || this.emptyText;
+		Session.set('displayValue', valueToDisplay(this));
+		return Session.get('displayValue');
     },
     'value':         function () { return valueToText(this.value, this.source) || this.emptyText; },
     'editableEmpty': function () {
@@ -71,21 +68,21 @@ m_editable.events({
     'submit': function (e, tmpl) {
         var self = this;
 
-        var val = mEditable.getVal(this.type)(tmpl.$('.editable-input'));
+        var val = mEditable.getVal(self.type)(tmpl.$('.editable-input'));
 
-        if (typeof self.onsubmit === 'function') {
+		if (typeof self.onsubmit === 'function') {
             if (self.async) {
                 tmpl.Session.set('loading', true);
-                this.onsubmit.call(this, val, function () {
+                self.onsubmit.call(self, val, function () {
                     tmpl.$('.m_editable-popup').trigger('hide');
                     doSavedTransition(tmpl);
                 });
                 return;
             }
-            this.onsubmit.call(this, val);
-        } else {
-            tmpl.$('.editable-click').text(val);
-        }
+            self.onsubmit.call(self, val);
+        } 
+        self.value = val;
+		Session.set('displayValue', valueToDisplay(self));
         tmpl.$('.m_editable-popup').trigger('hide');
         doSavedTransition(tmpl);
     },
@@ -210,6 +207,14 @@ function valueToText(val, source) {
     return val[0];
 }
 
+function valueToDisplay(tmpl) {
+    var v = valueToText(tmpl.value, tmpl.source) || tmpl.emptyText;
+    if (typeof tmpl.display === 'function') {
+        return tmpl.display(v, tmpl.value) || tmpl.emptyText;
+    }
+    return v || tmpl.emptyText;
+}
+
 function generateSettings (settings) {
     if (POSSIBLE_POSITIONS.indexOf(settings.position) == -1)
         delete settings.position;
@@ -221,6 +226,7 @@ function generateSettings (settings) {
         async: false,
         showbuttons: true,
         onsubmit: null,
+		display:null,
         value: null,
         position: 'left',
         title: null,
@@ -229,15 +235,8 @@ function generateSettings (settings) {
 }
 
 function doSavedTransition (tmpl) {
-    var $e = tmpl.$('.editable-click'),
-        bgColor = $e.css('background-color');
-
-    $e.css('background-color', '#FFFF80');
+    var $e = tmpl.$('.editable-click');
     setTimeout(function(){
-        if(bgColor === 'transparent') {
-            bgColor = '';
-        }
-        $e.css('background-color', bgColor);
         $e.addClass('editable-bg-transition');
         setTimeout(function(){
             $e.removeClass('editable-bg-transition');

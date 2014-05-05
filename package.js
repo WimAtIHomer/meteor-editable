@@ -16,8 +16,8 @@ Package.on_use(function (api) {
         'lib/select2/select2.png',
         'lib/select2/select2.css',
 
-        'lib/bootstrap-datetimepicker/bootstrap-datetimepicker.css',
-        'lib/bootstrap-datetimepicker/bootstrap-datetimepicker.js'
+        'lib/bootstrap-datetimepicker/bootstrap-datepicker.css',
+        'lib/bootstrap-datetimepicker/bootstrap-datepicker.js'
     ], 'client');
 
     // main files

@@ -29,7 +29,7 @@ Template.m_editable_form_date.events({
         e.stopImmediatePropagation();
     },
     'changeDate': function (e) {
-        if (e.date && !this.showbuttons && e.date.getTime() !== getCurrentValsTime(this.value)) {
+        if (e.date && !this.showbuttons) {
             $(e.target).closest('form').submit();
         }
 
@@ -51,11 +51,8 @@ Template.m_editable_form_date.rendered = function () {
 
 function initializeDatepicker(div) {
     return div.datepicker({
-        weekStart: 0,
-        startView: 0,
-        minViewMode: 0,
-        autoclose: false
-    });
+    todayBtn: "linked",
+    todayHighlight: true});
 }
 
 function stripTimeFromDate(date) {
