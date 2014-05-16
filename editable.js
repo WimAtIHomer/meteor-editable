@@ -45,9 +45,9 @@ m_editable.helpers({
     'displayVal': function () {
 		value = Session.get('displayValue');
 		if (!value) {
-			Session.set('displayValue', valueToDisplay(this));
+			Session.set('displayValue', true);
 		}
-		return Session.get('displayValue');
+		return valueToDisplay(this);
     },
     'value':         function () { return valueToText(this.value, this.source) || this.emptyText; },
     'editableEmpty': function () {
@@ -85,7 +85,7 @@ m_editable.events({
             self.onsubmit.call(self, val);
         } 
         self.value = val;
-		Session.set('displayValue', valueToDisplay(self));
+		Session.set('displayValue', true);
         tmpl.$('.m_editable-popup').trigger('hide');
         doSavedTransition(tmpl);
     },
