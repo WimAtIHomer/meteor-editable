@@ -10,10 +10,10 @@ Package.on_use(function (api) {
         'underscore'
     ], 'client');
 
+    api.addAssets('lib/select2/select2.png', 'client');
     // libs
     api.add_files([
         'lib/select2/select2.js',
-        'lib/select2/select2.png',
         'lib/select2/select2.css',
 
         'lib/bootstrap-datetimepicker/bootstrap-datepicker.css',
